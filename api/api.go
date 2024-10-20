@@ -1,13 +1,12 @@
 package main
 
 import (
-	"flag"
-	"fmt"
-	"pkg/xcode"
-
 	"api/internal/config"
 	"api/internal/handler"
 	"api/internal/svc"
+	"flag"
+	"fmt"
+	"pkg/xerror"
 
 	"github.com/zeromicro/go-zero/core/conf"
 	"github.com/zeromicro/go-zero/rest"
@@ -27,7 +26,7 @@ func main() {
 
 	ctx := svc.NewServiceContext(c)
 	handler.RegisterHandlers(server, ctx)
-	httpx.SetErrorHandler(xcode.ErrorHandler)
+	httpx.SetErrorHandler(xerror.ErrorHandler)
 	fmt.Printf("Starting server at %s:%d...\n", c.Host, c.Port)
 	server.Start()
 }

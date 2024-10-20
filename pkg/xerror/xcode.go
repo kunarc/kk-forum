@@ -1,9 +1,15 @@
-package xcode
+package xerror
 
-import "strconv"
+import (
+	"fmt"
+	"strconv"
+
+	"pkg/xerror/pb"
+)
 
 // type
 //
+//	业务错误
 //	@param error interface {
 //	@author kunarc
 //	@update 2024-10-19 05:49:38
@@ -57,4 +63,12 @@ func (x *XCode) Code() int {
 //	@update 2024-10-19 05:54:17
 func (x *XCode) Message() string {
 	return x.Error()
+}
+
+func Errorf(xe XError, format string, args ...interface{}) XError {
+	return New(xe.Code(), fmt.Sprintf(format, args...))
+}
+
+func fromStatus(st *pb.Status) XError {
+	return New(int(st.Code), st.Message)
 }

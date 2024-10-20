@@ -1,4 +1,4 @@
-package xcode
+package xerror
 
 import (
 	"context"
@@ -34,6 +34,7 @@ func XErrorFromError(err error) (xe XError) {
 		xe = v
 		return
 	}
+	// 判断是否是客户端超时或取消
 	switch err {
 	case context.Canceled:
 		xe = Canceled
