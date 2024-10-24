@@ -7,18 +7,18 @@ package like
 import (
 	"context"
 
-	"like/service"
+	"like/pb"
 
 	"github.com/zeromicro/go-zero/zrpc"
 	"google.golang.org/grpc"
 )
 
 type (
-	IsThumbupRequest  = service.IsThumbupRequest
-	IsThumbupResponse = service.IsThumbupResponse
-	ThumbupRequest    = service.ThumbupRequest
-	ThumbupResponse   = service.ThumbupResponse
-	UserThumbup       = service.UserThumbup
+	IsThumbupRequest  = pb.IsThumbupRequest
+	IsThumbupResponse = pb.IsThumbupResponse
+	ThumbupRequest    = pb.ThumbupRequest
+	ThumbupResponse   = pb.ThumbupResponse
+	UserThumbup       = pb.UserThumbup
 
 	Like interface {
 		Thumbup(ctx context.Context, in *ThumbupRequest, opts ...grpc.CallOption) (*ThumbupResponse, error)
@@ -37,11 +37,11 @@ func NewLike(cli zrpc.Client) Like {
 }
 
 func (m *defaultLike) Thumbup(ctx context.Context, in *ThumbupRequest, opts ...grpc.CallOption) (*ThumbupResponse, error) {
-	client := service.NewLikeClient(m.cli.Conn())
+	client := pb.NewLikeClient(m.cli.Conn())
 	return client.Thumbup(ctx, in, opts...)
 }
 
 func (m *defaultLike) IsThumbup(ctx context.Context, in *IsThumbupRequest, opts ...grpc.CallOption) (*IsThumbupResponse, error) {
-	client := service.NewLikeClient(m.cli.Conn())
+	client := pb.NewLikeClient(m.cli.Conn())
 	return client.IsThumbup(ctx, in, opts...)
 }

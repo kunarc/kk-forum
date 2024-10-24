@@ -4,27 +4,27 @@ import (
 	"context"
 
 	"user/internal/svc"
-	"user/service"
+	"user/pb"
 
 	"github.com/zeromicro/go-zero/core/logx"
 )
 
-type SendSmsLogic struct {
+type FindByIdLogic struct {
 	ctx    context.Context
 	svcCtx *svc.ServiceContext
 	logx.Logger
 }
 
-func NewSendSmsLogic(ctx context.Context, svcCtx *svc.ServiceContext) *SendSmsLogic {
-	return &SendSmsLogic{
+func NewFindByIdLogic(ctx context.Context, svcCtx *svc.ServiceContext) *FindByIdLogic {
+	return &FindByIdLogic{
 		ctx:    ctx,
 		svcCtx: svcCtx,
 		Logger: logx.WithContext(ctx),
 	}
 }
 
-func (l *SendSmsLogic) SendSms(in *service.SendSmsRequest) (*service.SendSmsResponse, error) {
+func (l *FindByIdLogic) FindById(in *pb.FindByIdRequest) (*pb.FindByIdResponse, error) {
 	// todo: add your logic here and delete this line
 
-	return &service.SendSmsResponse{}, nil
+	return &pb.FindByIdResponse{}, nil
 }

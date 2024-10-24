@@ -1,6 +1,9 @@
 package model
 
-import "github.com/zeromicro/go-zero/core/stores/sqlx"
+import (
+	"github.com/zeromicro/go-zero/core/stores/cache"
+	"github.com/zeromicro/go-zero/core/stores/sqlx"
+)
 
 var _ ArticleModel = (*customArticleModel)(nil)
 
@@ -9,7 +12,6 @@ type (
 	// and implement the added methods in customArticleModel.
 	ArticleModel interface {
 		articleModel
-		withSession(session sqlx.Session) ArticleModel
 	}
 
 	customArticleModel struct {
@@ -18,12 +20,8 @@ type (
 )
 
 // NewArticleModel returns a model for the database table.
-func NewArticleModel(conn sqlx.SqlConn) ArticleModel {
+func NewArticleModel(conn sqlx.SqlConn, c cache.CacheConf, opts ...cache.Option) ArticleModel {
 	return &customArticleModel{
-		defaultArticleModel: newArticleModel(conn),
+		defaultArticleModel: newArticleModel(conn, c, opts...),
 	}
-}
-
-func (m *customArticleModel) withSession(session sqlx.Session) ArticleModel {
-	return NewArticleModel(sqlx.NewSqlConnFromSession(session))
 }

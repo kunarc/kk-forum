@@ -4,27 +4,27 @@ import (
 	"context"
 
 	"user/internal/svc"
-	"user/service"
+	"user/pb"
 
 	"github.com/zeromicro/go-zero/core/logx"
 )
 
-type FindByIdLogic struct {
+type RegisterLogic struct {
 	ctx    context.Context
 	svcCtx *svc.ServiceContext
 	logx.Logger
 }
 
-func NewFindByIdLogic(ctx context.Context, svcCtx *svc.ServiceContext) *FindByIdLogic {
-	return &FindByIdLogic{
+func NewRegisterLogic(ctx context.Context, svcCtx *svc.ServiceContext) *RegisterLogic {
+	return &RegisterLogic{
 		ctx:    ctx,
 		svcCtx: svcCtx,
 		Logger: logx.WithContext(ctx),
 	}
 }
 
-func (l *FindByIdLogic) FindById(in *service.FindByIdRequest) (*service.FindByIdResponse, error) {
+func (l *RegisterLogic) Register(in *pb.RegisterRequest) (*pb.RegisterResponse, error) {
 	// todo: add your logic here and delete this line
 
-	return &service.FindByIdResponse{}, nil
+	return &pb.RegisterResponse{}, nil
 }

@@ -4,7 +4,7 @@
 // - protoc             v3.20.3
 // source: user.proto
 
-package service
+package pb
 
 import (
 	context "context"
@@ -38,7 +38,7 @@ func NewUserClient(cc grpc.ClientConnInterface) UserClient {
 
 func (c *userClient) Register(ctx context.Context, in *RegisterRequest, opts ...grpc.CallOption) (*RegisterResponse, error) {
 	out := new(RegisterResponse)
-	err := c.cc.Invoke(ctx, "/service.User/Register", in, out, opts...)
+	err := c.cc.Invoke(ctx, "/pb.User/Register", in, out, opts...)
 	if err != nil {
 		return nil, err
 	}
@@ -47,7 +47,7 @@ func (c *userClient) Register(ctx context.Context, in *RegisterRequest, opts ...
 
 func (c *userClient) FindById(ctx context.Context, in *FindByIdRequest, opts ...grpc.CallOption) (*FindByIdResponse, error) {
 	out := new(FindByIdResponse)
-	err := c.cc.Invoke(ctx, "/service.User/FindById", in, out, opts...)
+	err := c.cc.Invoke(ctx, "/pb.User/FindById", in, out, opts...)
 	if err != nil {
 		return nil, err
 	}
@@ -56,7 +56,7 @@ func (c *userClient) FindById(ctx context.Context, in *FindByIdRequest, opts ...
 
 func (c *userClient) FindByMobile(ctx context.Context, in *FindByMobileRequest, opts ...grpc.CallOption) (*FindByMobileResponse, error) {
 	out := new(FindByMobileResponse)
-	err := c.cc.Invoke(ctx, "/service.User/FindByMobile", in, out, opts...)
+	err := c.cc.Invoke(ctx, "/pb.User/FindByMobile", in, out, opts...)
 	if err != nil {
 		return nil, err
 	}
@@ -65,7 +65,7 @@ func (c *userClient) FindByMobile(ctx context.Context, in *FindByMobileRequest, 
 
 func (c *userClient) SendSms(ctx context.Context, in *SendSmsRequest, opts ...grpc.CallOption) (*SendSmsResponse, error) {
 	out := new(SendSmsResponse)
-	err := c.cc.Invoke(ctx, "/service.User/SendSms", in, out, opts...)
+	err := c.cc.Invoke(ctx, "/pb.User/SendSms", in, out, opts...)
 	if err != nil {
 		return nil, err
 	}
@@ -122,7 +122,7 @@ func _User_Register_Handler(srv interface{}, ctx context.Context, dec func(inter
 	}
 	info := &grpc.UnaryServerInfo{
 		Server:     srv,
-		FullMethod: "/service.User/Register",
+		FullMethod: "/pb.User/Register",
 	}
 	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
 		return srv.(UserServer).Register(ctx, req.(*RegisterRequest))
@@ -140,7 +140,7 @@ func _User_FindById_Handler(srv interface{}, ctx context.Context, dec func(inter
 	}
 	info := &grpc.UnaryServerInfo{
 		Server:     srv,
-		FullMethod: "/service.User/FindById",
+		FullMethod: "/pb.User/FindById",
 	}
 	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
 		return srv.(UserServer).FindById(ctx, req.(*FindByIdRequest))
@@ -158,7 +158,7 @@ func _User_FindByMobile_Handler(srv interface{}, ctx context.Context, dec func(i
 	}
 	info := &grpc.UnaryServerInfo{
 		Server:     srv,
-		FullMethod: "/service.User/FindByMobile",
+		FullMethod: "/pb.User/FindByMobile",
 	}
 	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
 		return srv.(UserServer).FindByMobile(ctx, req.(*FindByMobileRequest))
@@ -176,7 +176,7 @@ func _User_SendSms_Handler(srv interface{}, ctx context.Context, dec func(interf
 	}
 	info := &grpc.UnaryServerInfo{
 		Server:     srv,
-		FullMethod: "/service.User/SendSms",
+		FullMethod: "/pb.User/SendSms",
 	}
 	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
 		return srv.(UserServer).SendSms(ctx, req.(*SendSmsRequest))
@@ -188,7 +188,7 @@ func _User_SendSms_Handler(srv interface{}, ctx context.Context, dec func(interf
 // It's only intended for direct use with grpc.RegisterService,
 // and not to be introspected or modified (even as a copy)
 var User_ServiceDesc = grpc.ServiceDesc{
-	ServiceName: "service.User",
+	ServiceName: "pb.User",
 	HandlerType: (*UserServer)(nil),
 	Methods: []grpc.MethodDesc{
 		{

@@ -4,7 +4,7 @@
 // - protoc             v3.20.3
 // source: like.proto
 
-package service
+package pb
 
 import (
 	context "context"
@@ -36,7 +36,7 @@ func NewLikeClient(cc grpc.ClientConnInterface) LikeClient {
 
 func (c *likeClient) Thumbup(ctx context.Context, in *ThumbupRequest, opts ...grpc.CallOption) (*ThumbupResponse, error) {
 	out := new(ThumbupResponse)
-	err := c.cc.Invoke(ctx, "/service.Like/Thumbup", in, out, opts...)
+	err := c.cc.Invoke(ctx, "/pb.Like/Thumbup", in, out, opts...)
 	if err != nil {
 		return nil, err
 	}
@@ -45,7 +45,7 @@ func (c *likeClient) Thumbup(ctx context.Context, in *ThumbupRequest, opts ...gr
 
 func (c *likeClient) IsThumbup(ctx context.Context, in *IsThumbupRequest, opts ...grpc.CallOption) (*IsThumbupResponse, error) {
 	out := new(IsThumbupResponse)
-	err := c.cc.Invoke(ctx, "/service.Like/IsThumbup", in, out, opts...)
+	err := c.cc.Invoke(ctx, "/pb.Like/IsThumbup", in, out, opts...)
 	if err != nil {
 		return nil, err
 	}
@@ -94,7 +94,7 @@ func _Like_Thumbup_Handler(srv interface{}, ctx context.Context, dec func(interf
 	}
 	info := &grpc.UnaryServerInfo{
 		Server:     srv,
-		FullMethod: "/service.Like/Thumbup",
+		FullMethod: "/pb.Like/Thumbup",
 	}
 	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
 		return srv.(LikeServer).Thumbup(ctx, req.(*ThumbupRequest))
@@ -112,7 +112,7 @@ func _Like_IsThumbup_Handler(srv interface{}, ctx context.Context, dec func(inte
 	}
 	info := &grpc.UnaryServerInfo{
 		Server:     srv,
-		FullMethod: "/service.Like/IsThumbup",
+		FullMethod: "/pb.Like/IsThumbup",
 	}
 	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
 		return srv.(LikeServer).IsThumbup(ctx, req.(*IsThumbupRequest))
@@ -124,7 +124,7 @@ func _Like_IsThumbup_Handler(srv interface{}, ctx context.Context, dec func(inte
 // It's only intended for direct use with grpc.RegisterService,
 // and not to be introspected or modified (even as a copy)
 var Like_ServiceDesc = grpc.ServiceDesc{
-	ServiceName: "service.Like",
+	ServiceName: "pb.Like",
 	HandlerType: (*LikeServer)(nil),
 	Methods: []grpc.MethodDesc{
 		{

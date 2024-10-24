@@ -9,12 +9,12 @@ import (
 
 	"like/internal/logic"
 	"like/internal/svc"
-	"like/service"
+	"like/pb"
 )
 
 type LikeServer struct {
 	svcCtx *svc.ServiceContext
-	service.UnimplementedLikeServer
+	pb.UnimplementedLikeServer
 }
 
 func NewLikeServer(svcCtx *svc.ServiceContext) *LikeServer {
@@ -23,12 +23,12 @@ func NewLikeServer(svcCtx *svc.ServiceContext) *LikeServer {
 	}
 }
 
-func (s *LikeServer) Thumbup(ctx context.Context, in *service.ThumbupRequest) (*service.ThumbupResponse, error) {
+func (s *LikeServer) Thumbup(ctx context.Context, in *pb.ThumbupRequest) (*pb.ThumbupResponse, error) {
 	l := logic.NewThumbupLogic(ctx, s.svcCtx)
 	return l.Thumbup(in)
 }
 
-func (s *LikeServer) IsThumbup(ctx context.Context, in *service.IsThumbupRequest) (*service.IsThumbupResponse, error) {
+func (s *LikeServer) IsThumbup(ctx context.Context, in *pb.IsThumbupRequest) (*pb.IsThumbupResponse, error) {
 	l := logic.NewIsThumbupLogic(ctx, s.svcCtx)
 	return l.IsThumbup(in)
 }
