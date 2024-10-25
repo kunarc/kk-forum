@@ -1,3 +1,16 @@
 Name: api
 Host: 0.0.0.0
 Port: 8888
+Auth:
+  AccessSecret: kunarc
+  AccessExpire: 10000
+UserRpc:
+  Etcd:
+    Hosts:
+      - 127.0.0.1:2370
+    Key: user.rpc
+  NonBlock: true
+BizRedis:
+  Host: 127.0.0.1:6379
+  Pass: "200483"
+  Type: node
