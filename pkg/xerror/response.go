@@ -2,7 +2,10 @@ package xerror
 
 import (
 	"context"
+	"fmt"
 	"net/http"
+
+	"pkg/xerror/pb"
 
 	"github.com/pkg/errors"
 )
@@ -16,9 +19,10 @@ import (
 //	@update 2024-10-19 06:13:52
 func ErrorHandler(err error) (int, any) {
 	xe := XErrorFromError(err)
-	return http.StatusOK, &XCode{
-		code: xe.Code(),
-		msg:  xe.Message(),
+	fmt.Println(xe.Code())
+	return http.StatusOK, &pb.Status{
+		Code:    int32(xe.Code()),
+		Message: xe.Message(),
 	}
 }
 

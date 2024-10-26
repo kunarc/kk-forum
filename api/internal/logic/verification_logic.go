@@ -8,11 +8,11 @@ import (
 	"strings"
 
 	"api/internal/code"
-	"api/internal/grpc_client/user"
 	"api/internal/svc"
 	"api/internal/types"
 
 	"github.com/zeromicro/go-zero/core/logx"
+	"github.com/zeromicro/go-zero/core/stores/redis"
 )
 
 const (
@@ -51,11 +51,11 @@ func (l *VerificationLogic) Verification(req *types.VerificationRequest) (resp *
 		return nil, code.SendVerificationCodeExceed
 	}
 	verCode := util.RandomNumeric(6)
-	_, err = l.svcCtx.UserRpc.SendSms(l.ctx, &user.SendSmsRequest{Mobile: mobile})
-	if err != nil {
-		l.Logger.Errorf("send code to user error: mobile is %s, err is %s", mobile, err.Error())
-		return nil, code.SendVerCodeError
-	}
+	// _, err = l.svcCtx.UserRpc.SendSms(l.ctx, &user.SendSmsRequest{Mobile: mobile})
+	// if err != nil {
+	// 	l.Logger.Errorf("send code to user error: mobile is %s, err is %s", mobile, err.Error())
+	// 	return nil, code.SendVerCodeError
+	// }
 	err = l.saveVerCode(mobile, verCode)
 	if err != nil {
 		l.Logger.Errorf("save code to redis error: mobile is %s, err is %s", mobile, err.Error())
@@ -98,4 +98,9 @@ func (l *VerificationLogic) incrVerCode(mobile string) error {
 		return err
 	}
 	return l.svcCtx.BizRedis.Expire(key, sendVerCodeExpries)
+}
+
+func GetActiveVerCode(rds *redis.Redis, mobile string) (string, error) {
+	key := fmt.Sprintf(prefixVerCodeKey, mobile)
+	return rds.Get(key)
 }
