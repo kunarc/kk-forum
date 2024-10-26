@@ -24,7 +24,7 @@ var (
 	articleRowsExpectAutoSet   = strings.Join(stringx.Remove(articleFieldNames, "`id`", "`create_at`", "`create_time`", "`created_at`", "`update_at`", "`update_time`", "`updated_at`"), ",")
 	articleRowsWithPlaceHolder = strings.Join(stringx.Remove(articleFieldNames, "`id`", "`create_at`", "`create_time`", "`created_at`", "`update_at`", "`update_time`", "`updated_at`"), "=?,") + "=?"
 
-	cacheBeyondArticleArticleIdPrefix = "cache:beyondArticle:article:id:"
+	cacheKkArticleArticleIdPrefix = "cache:kkArticle:article:id:"
 )
 
 type (
@@ -68,18 +68,18 @@ func newArticleModel(conn sqlx.SqlConn, c cache.CacheConf, opts ...cache.Option)
 }
 
 func (m *defaultArticleModel) Delete(ctx context.Context, id uint64) error {
-	beyondArticleArticleIdKey := fmt.Sprintf("%s%v", cacheBeyondArticleArticleIdPrefix, id)
+	kkArticleArticleIdKey := fmt.Sprintf("%s%v", cacheKkArticleArticleIdPrefix, id)
 	_, err := m.ExecCtx(ctx, func(ctx context.Context, conn sqlx.SqlConn) (result sql.Result, err error) {
 		query := fmt.Sprintf("delete from %s where `id` = ?", m.table)
 		return conn.ExecCtx(ctx, query, id)
-	}, beyondArticleArticleIdKey)
+	}, kkArticleArticleIdKey)
 	return err
 }
 
 func (m *defaultArticleModel) FindOne(ctx context.Context, id uint64) (*Article, error) {
-	beyondArticleArticleIdKey := fmt.Sprintf("%s%v", cacheBeyondArticleArticleIdPrefix, id)
+	kkArticleArticleIdKey := fmt.Sprintf("%s%v", cacheKkArticleArticleIdPrefix, id)
 	var resp Article
-	err := m.QueryRowCtx(ctx, &resp, beyondArticleArticleIdKey, func(ctx context.Context, conn sqlx.SqlConn, v any) error {
+	err := m.QueryRowCtx(ctx, &resp, kkArticleArticleIdKey, func(ctx context.Context, conn sqlx.SqlConn, v any) error {
 		query := fmt.Sprintf("select %s from %s where `id` = ? limit 1", articleRows, m.table)
 		return conn.QueryRowCtx(ctx, v, query, id)
 	})
@@ -94,25 +94,25 @@ func (m *defaultArticleModel) FindOne(ctx context.Context, id uint64) (*Article,
 }
 
 func (m *defaultArticleModel) Insert(ctx context.Context, data *Article) (sql.Result, error) {
-	beyondArticleArticleIdKey := fmt.Sprintf("%s%v", cacheBeyondArticleArticleIdPrefix, data.Id)
+	kkArticleArticleIdKey := fmt.Sprintf("%s%v", cacheKkArticleArticleIdPrefix, data.Id)
 	ret, err := m.ExecCtx(ctx, func(ctx context.Context, conn sqlx.SqlConn) (result sql.Result, err error) {
 		query := fmt.Sprintf("insert into %s (%s) values (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)", m.table, articleRowsExpectAutoSet)
 		return conn.ExecCtx(ctx, query, data.Title, data.Content, data.Cover, data.Description, data.AuthorId, data.Status, data.CommentNum, data.LikeNum, data.CollectNum, data.ViewNum, data.ShareNum, data.TagIds, data.PublishTime)
-	}, beyondArticleArticleIdKey)
+	}, kkArticleArticleIdKey)
 	return ret, err
 }
 
 func (m *defaultArticleModel) Update(ctx context.Context, data *Article) error {
-	beyondArticleArticleIdKey := fmt.Sprintf("%s%v", cacheBeyondArticleArticleIdPrefix, data.Id)
+	kkArticleArticleIdKey := fmt.Sprintf("%s%v", cacheKkArticleArticleIdPrefix, data.Id)
 	_, err := m.ExecCtx(ctx, func(ctx context.Context, conn sqlx.SqlConn) (result sql.Result, err error) {
 		query := fmt.Sprintf("update %s set %s where `id` = ?", m.table, articleRowsWithPlaceHolder)
 		return conn.ExecCtx(ctx, query, data.Title, data.Content, data.Cover, data.Description, data.AuthorId, data.Status, data.CommentNum, data.LikeNum, data.CollectNum, data.ViewNum, data.ShareNum, data.TagIds, data.PublishTime, data.Id)
-	}, beyondArticleArticleIdKey)
+	}, kkArticleArticleIdKey)
 	return err
 }
 
 func (m *defaultArticleModel) formatPrimary(primary any) string {
-	return fmt.Sprintf("%s%v", cacheBeyondArticleArticleIdPrefix, primary)
+	return fmt.Sprintf("%s%v", cacheKkArticleArticleIdPrefix, primary)
 }
 
 func (m *defaultArticleModel) queryPrimary(ctx context.Context, conn sqlx.SqlConn, v, primary any) error {
