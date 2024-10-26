@@ -1,0 +1,213 @@
+name: kk-forum
+services:
+  mysql:
+    image: mysql:latest
+    container_name: kk-mysql
+    volumes:
+      - kk_mysql_data:/var/lib/mysql
+      - ./config/mysql/my.cnf:/etc/my.cnf
+    command: ["mysqld", "--defaults-file=/etc/my.cnf"]
+    healthcheck:
+      test: [ "CMD-SHELL", "mysqladmin ping -h localhost -uroot -p$$MYSQL_ROOT_PASSWORD" ]
+      interval: 5s
+      retries: 10
+    ports:
+      - 3306:3306
+    env_file:
+      - ./env/mysql.env
+  # canal:
+  #   image: canal/canal-server:v1.1.8-alpha-3
+  #   container_name: kk-canal
+  #   ports:
+  #     - "11111:11111"
+  #     - "11112:11112"
+  #   # command: ["/home/admin/canal-server/bin/startup.sh"]
+  #   volumes:
+  #     - ./config/canal/instance.properties:/home/admin/canal-server/conf/example/instance.properties
+  #     - ./config/canal/canal.properties:/home/admin/canal-server/conf/canal.properties
+  #   depends_on:
+  #     - mysql
+  #     - kafka
+
+  redis:
+    image: redis:latest
+    container_name: kk-redis
+    volumes:
+      - kk_redis_data:/data
+      - ./config/redis/redis.conf:/usr/local/etc/redis/redis.conf
+    command: ["redis-server", "/usr/local/etc/redis/redis.conf"]
+    healthcheck:
+      test: [ "CMD-SHELL", "redis-cli -a $$REDIS_PASSWORD ping | grep PONG" ]
+      interval: 30s
+      timeout: 30s
+      retries: 60
+    ports: 
+      - 6379:6379
+    env_file:
+      - ./env/redis.env
+
+  etcd:
+    image: bitnami/etcd:latest  # etcd 镜像
+    container_name: kk-etcd
+    environment:
+      - ETCD_NAME=etcd0
+      - ETCD_INITIAL_ADVERTISE_PEER_URLS=http://etcd:2380
+      - ETCD_LISTEN_PEER_URLS=http://0.0.0.0:2380
+      - ETCD_ADVERTISE_CLIENT_URLS=http://etcd:2379
+      - ETCD_LISTEN_CLIENT_URLS=http://0.0.0.0:2379
+      - ETCD_INITIAL_CLUSTER=etcd0=http://etcd:2380
+      - ETCD_INITIAL_CLUSTER_STATE=new
+      - ETCD_INITIAL_CLUSTER_TOKEN=docker-etcd-token
+      - ETCD_DATA_DIR=/etcd-data  # 数据存储路径
+      - ALLOW_NONE_AUTHENTICATION=yes
+    ports:
+      - "2379:2379"  # 客户端通信端口
+      - "2380:2380"  # 节点间通信端口
+    volumes:
+      - kk_etcd_data:/etcd-data  # 将 etcd 数据存储挂载到主机
+
+  zookeeper: # 改为 my_zookeeper
+    image: zookeeper:latest
+    container_name: kk-zookeeper # 也可以自定义容器名
+    ports:
+      - "2181:2181"
+      
+  kafka:
+    image: wurstmeister/kafka:latest
+    container_name: kk-kafka
+    ports:
+      - "9092:9092"
+    environment:
+      KAFKA_BROKER_ID: 0
+      KAFKA_ZOOKEEPER_CONNECT: kk-zookeeper:2181
+      KAFKA_LISTENERS: PLAINTEXT://0.0.0.0:9092 
+      KAFKA_ADVERTISED_LISTENERS: PLAINTEXT://localhost:9092
+      # KAFKA_LISTENER_SECURITY_PROTOCOL_MAP: PLAINTEXT:PLAINTEXT,PLAINTEXT1:PLAINTEXT
+      # KAFKA_OFFSETS_TOPIC_REPLICATION_FACTOR: 1  
+    depends_on:
+      - zookeeper
+
+  prometheus: 
+    image: prom/prometheus    
+    container_name: kk-prometheus 
+    ports:
+      - "9000:9000"
+      - "9090:9090"
+    volumes:
+     - ./config/prometheus/prometheus.yml:/etc/prometheus/prometheus.yml
+     - ./config/prometheus/targets.json:/etc/prometheus/targets.json
+     - kk_prometheus_data:/prometheus
+
+  jaeger:
+    image: jaegertracing/all-in-one:1.61.0
+    container_name: kk-jaeger
+    ports:
+      - "6831:6831/udp"
+      - "6832:6832/udp"
+      - "5778:5778"
+      - "16686:16686"
+      - "4317:4317"
+      - "4318:4318"
+      - "14250:14250"
+      - "14268:14268"
+      - "14269:14269"
+      - "9411:9411"
+    environment:
+      - COLLECTOR_ZIPKIN_HOST_PORT=:9411
+      - SPAN_STORAGE_TYPE=badger
+    volumes:
+      - kk_jaeger_data:/badger  # 持久化 Badger 数据目录
+  
+  es:
+    image: docker.elastic.co/elasticsearch/elasticsearch:8.14.2
+    container_name: kk-es
+    volumes:
+      - kk_es_data:/usr/share/elasticsearch/data
+    ports:
+      - 9200:9200
+    environment:
+      - node.name=es
+      - cluster.name=local-cluster
+      - bootstrap.memory_lock=true
+      - discovery.type=single-node  # 单节点模式
+      - ELASTIC_PASSWORD=8888
+      - xpack.security.enabled=false  # 禁用xpack安全性
+      - xpack.security.http.ssl.enabled=false  # 禁用HTTPS
+    ulimits:
+      memlock:
+        soft: -1
+        hard: -1
+    healthcheck:
+      test: ["CMD-SHELL", "curl -s http://localhost:9200 | grep -q 'You Know, for Search'"]
+      interval: 10s
+      timeout: 5s
+      retries: 120
+
+  kibana:
+    image: docker.elastic.co/kibana/kibana:8.14.2
+    container_name: kk-kibana
+    ports:
+      - 5601:5601
+    environment:
+      - SERVERNAME=kibana
+      - ELASTICSEARCH_HOSTS=http://kk-es:9200  # 使用 HTTP 而不是 HTTPS
+      - ELASTICSEARCH_USERNAME=kibana
+      - ELASTICSEARCH_PASSWORD=8888  # 保留用户名和密码
+    depends_on:
+     - es
+    healthcheck:
+      test:
+        [
+          "CMD-SHELL",
+          "curl -s -I http://localhost:5601 | grep -q 'HTTP/1.1 302 Found'",  # 使用 HTTP 检查
+        ]
+      interval: 10s
+      timeout: 10s
+      retries: 120
+
+  consul:
+    image: hashicorp/consul
+    container_name: kk-consul
+    ports:
+      - "8500:8500"  # Consul UI and API
+      - "8600:8600/udp"  # DNS queries
+      - "8600:8600/tcp"
+    # environment:
+    #   - CONSUL_BIND_INTERFACE=eth0
+    command: agent -server -ui -node=server-1 -bootstrap-expect=1 -client=0.0.0.0
+    volumes:
+      - kk_consul_data:/consul/data
+
+  grafana:
+    image: grafana/grafana-oss:11.0.2
+    container_name: kk-grafana
+    ports:
+      - "3000:3000"
+    privileged: true
+    user: root
+    volumes:
+      - kk_grafana_data:/var/lib/grafana
+    environment:
+      - GF_SECURITY_ADMIN_USER=admin
+      - GF_SECURITY_ADMIN_PASSWORD=123456
+      - GF_SECURITY_ALLOW_EMBEDDING=true
+      - GF_SNAPSHOTS_EXTERNAL_ENABLED=false
+      - GF_ALERTING_ENABLED=false
+
+volumes:
+  kk_mysql_data:
+    name: "kk_mysql_data"
+  kk_redis_data:
+    name: "kk_redis_data"
+  kk_etcd_data:
+    name: "kk_etcd_data"
+  kk_prometheus_data:
+    name: "kk_prometheus_data"
+  kk_jaeger_data:
+    name: "kk_jaeger_data"
+  kk_es_data:
+    name: "kk_es_data"
+  kk_consul_data:
+    name: "kk_consul_data"
+  kk_grafana_data:
+    name: "kk_grafana_data"
