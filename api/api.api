@@ -18,8 +18,8 @@ type (
 	VerificationRequest {
 		Mobile string `json:"mobile"`
 	}
-	VerificationResponse  {}
-	LoginRequest {
+	VerificationResponse struct{}
+	LoginRequest         {
 		Mobile           string `json:"mobile"`
 		VerificationCode string `json:"verification_code"`
 	}
@@ -31,6 +31,18 @@ type (
 		UserId   int64  `json:"user_id"`
 		Username string `json:"username"`
 		Avatar   string `json:"avatar"`
+	}
+	UploadCoverResponse {
+		CoverUrl string `json:"cover_url"`
+	}
+	PublishRequest {
+		Title       string `json:"title"`
+		Content     string `json:"content"`
+		Description string `json:"description"`
+		Cover       string `json:"cover"`
+	}
+	PublishResponse {
+		ArticleId int64 `json:"article_id"`
 	}
 )
 
@@ -58,3 +70,14 @@ service api {
 	get /info returns (UserInfoResponse)
 }
 
+@server (
+	prefix: /v1/article
+	jwt:    Auth
+)
+service api {
+	@handler UploadCoverHandler
+	post /upload/cover returns (UploadCoverResponse)
+
+	@handler PublishHandler
+	post /publish (PublishRequest) returns (PublishResponse)
+}

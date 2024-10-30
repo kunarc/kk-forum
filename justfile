@@ -34,3 +34,5 @@ grpc:
     protoc --proto_path=pkg/xcode/pb --go_out=pkg/xcode/pb --go-grpc_out=pkg/xcode/pb  pkg/xcode/pb/status.proto
 grpc-user:
     protoc --proto_path=api/internal/protos --go_out=api/internal/grpc_client --go-grpc_out=api/internal/grpc_client  api/internal/protos/user.proto
+grpc-article:
+    protoc --proto_path=api/internal/protos --go_out=api/internal/grpc_client --go-grpc_out=api/internal/grpc_client  api/internal/protos/article.proto

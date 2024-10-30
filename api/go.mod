@@ -89,6 +89,9 @@ require (
 	sigs.k8s.io/yaml v1.3.0 // indirect
 )
 
-require pkg v0.0.0
+require (
+	github.com/aliyun/aliyun-oss-go-sdk v3.0.2+incompatible
+	pkg v0.0.0
+)
 
 replace pkg => ../pkg
