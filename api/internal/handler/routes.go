@@ -45,4 +45,21 @@ func RegisterHandlers(server *rest.Server, serverCtx *svc.ServiceContext) {
 		rest.WithSignature(serverCtx.Config.Signature),
 		rest.WithPrefix("/v1/user"),
 	)
+
+	server.AddRoutes(
+		[]rest.Route{
+			{
+				Method:  http.MethodPost,
+				Path:    "/publish",
+				Handler: PublishHandler(serverCtx),
+			},
+			{
+				Method:  http.MethodPost,
+				Path:    "/upload/cover",
+				Handler: UploadCoverHandler(serverCtx),
+			},
+		},
+		rest.WithJwt(serverCtx.Config.Auth.AccessSecret),
+		rest.WithPrefix("/v1/article"),
+	)
 }

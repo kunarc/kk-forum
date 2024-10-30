@@ -4,7 +4,7 @@
 // - protoc             v3.20.3
 // source: article.proto
 
-package pb
+package article
 
 import (
 	context "context"
