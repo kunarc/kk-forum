@@ -24,7 +24,5 @@ func NewArticleDeleteLogic(ctx context.Context, svcCtx *svc.ServiceContext) *Art
 }
 
 func (l *ArticleDeleteLogic) ArticleDelete(in *pb.ArticleDeleteRequest) (*pb.ArticleDeleteResponse, error) {
-	// todo: add your logic here and delete this line
-
 	return &pb.ArticleDeleteResponse{}, nil
 }

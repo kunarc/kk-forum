@@ -29,7 +29,6 @@ func NewPublishLogic(ctx context.Context, svcCtx *svc.ServiceContext) *PublishLo
 }
 
 func (l *PublishLogic) Publish(req *types.PublishRequest) (resp *types.PublishResponse, err error) {
-	// todo: add your logic here and delete this line
 	if len(req.Title) == 0 {
 		return nil, code.ArticleTitleEmpty
 	}

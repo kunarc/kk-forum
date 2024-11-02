@@ -38,7 +38,6 @@ func NewVerificationLogic(ctx context.Context, svcCtx *svc.ServiceContext) *Veri
 }
 
 func (l *VerificationLogic) Verification(req *types.VerificationRequest) (resp *types.VerificationResponse, err error) {
-	// todo: add your logic here and delete this line
 	mobile := strings.TrimSpace(req.Mobile)
 	if len(mobile) != 11 {
 		return nil, code.MobileIsError

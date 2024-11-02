@@ -25,7 +25,5 @@ func NewFollowListLogic(ctx context.Context, svcCtx *svc.ServiceContext) *Follow
 
 // 关注列表
 func (l *FollowListLogic) FollowList(in *pb.FollowListRequest) (*pb.FollowListResponse, error) {
-	// todo: add your logic here and delete this line
-
 	return &pb.FollowListResponse{}, nil
 }

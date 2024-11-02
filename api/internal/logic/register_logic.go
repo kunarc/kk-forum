@@ -30,7 +30,6 @@ func NewRegisterLogic(ctx context.Context, svcCtx *svc.ServiceContext) *Register
 }
 
 func (l *RegisterLogic) Register(req *types.RegisterRequest) (resp *types.RegisterResponse, err error) {
-	// todo: add your logic here and delete this line
 	name := req.Name
 	req.Name = strings.TrimSpace(req.Name)
 	if req.Name != name {

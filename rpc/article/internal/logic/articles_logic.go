@@ -24,7 +24,5 @@ func NewArticlesLogic(ctx context.Context, svcCtx *svc.ServiceContext) *Articles
 }
 
 func (l *ArticlesLogic) Articles(in *pb.ArticlesRequest) (*pb.ArticlesResponse, error) {
-	// todo: add your logic here and delete this line
-
 	return &pb.ArticlesResponse{}, nil
 }

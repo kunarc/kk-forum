@@ -24,7 +24,5 @@ func NewArticleDetailLogic(ctx context.Context, svcCtx *svc.ServiceContext) *Art
 }
 
 func (l *ArticleDetailLogic) ArticleDetail(in *pb.ArticleDetailRequest) (*pb.ArticleDetailResponse, error) {
-	// todo: add your logic here and delete this line
-
 	return &pb.ArticleDetailResponse{}, nil
 }

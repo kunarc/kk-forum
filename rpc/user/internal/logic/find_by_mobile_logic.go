@@ -24,7 +24,6 @@ func NewFindByMobileLogic(ctx context.Context, svcCtx *svc.ServiceContext) *Find
 }
 
 func (l *FindByMobileLogic) FindByMobile(in *pb.FindByMobileRequest) (*pb.FindByMobileResponse, error) {
-	// todo: add your logic here and delete this line
 	user, err := l.svcCtx.UserModel.FindOneByMobile(l.ctx, in.Mobile)
 	if err != nil {
 		l.Logger.Errorf("FindByMobile mobile: %s error: %v", in.Mobile, err)

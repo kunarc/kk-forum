@@ -28,7 +28,6 @@ func NewPublishLogic(ctx context.Context, svcCtx *svc.ServiceContext) *PublishLo
 }
 
 func (l *PublishLogic) Publish(in *pb.PublishRequest) (*pb.PublishResponse, error) {
-	// todo: add your logic here and delete this line
 	if in.UserId <= 0 {
 		return nil, code.UserIdInvaild
 	}

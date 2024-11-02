@@ -29,7 +29,6 @@ func NewUploadCoverLogic(ctx context.Context, svcCtx *svc.ServiceContext) *Uploa
 }
 
 func (l *UploadCoverLogic) UploadCover(r *http.Request) (resp *types.UploadCoverResponse, err error) {
-	// todo: add your logic here and delete this line
 	err = r.ParseMultipartForm(maxFileSize)
 	if err != nil {
 		return nil, err

@@ -25,7 +25,5 @@ func NewUnFollowLogic(ctx context.Context, svcCtx *svc.ServiceContext) *UnFollow
 
 // 取消关注
 func (l *UnFollowLogic) UnFollow(in *pb.UnFollowRequest) (*pb.UnFollowResponse, error) {
-	// todo: add your logic here and delete this line
-
 	return &pb.UnFollowResponse{}, nil
 }
