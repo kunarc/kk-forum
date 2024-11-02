@@ -4,7 +4,7 @@ import (
 	"context"
 
 	"like/internal/svc"
-	"like/service"
+	"like/pb"
 
 	"github.com/zeromicro/go-zero/core/logx"
 )
@@ -23,8 +23,8 @@ func NewThumbupLogic(ctx context.Context, svcCtx *svc.ServiceContext) *ThumbupLo
 	}
 }
 
-func (l *ThumbupLogic) Thumbup(in *service.ThumbupRequest) (*service.ThumbupResponse, error) {
+func (l *ThumbupLogic) Thumbup(in *pb.ThumbupRequest) (*pb.ThumbupResponse, error) {
 	// todo: add your logic here and delete this line
 
-	return &service.ThumbupResponse{}, nil
+	return &pb.ThumbupResponse{}, nil
 }
