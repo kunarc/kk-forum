@@ -26,7 +26,5 @@ func NewIsThumbupLogic(ctx context.Context, svcCtx *svc.ServiceContext) *IsThumb
 }
 
 func (l *IsThumbupLogic) IsThumbup(in *pb.IsThumbupRequest) (*pb.IsThumbupResponse, error) {
-	// todo: add your logic here and delete this line
-
 	return &pb.IsThumbupResponse{}, nil
 }
