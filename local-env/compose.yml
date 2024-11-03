@@ -1,7 +1,7 @@
 name: kk-forum
 services:
   mysql:
-    image: mysql:latest
+    image: mysql:8.0
     container_name: kk-mysql
     volumes:
       - kk_mysql_data:/var/lib/mysql
@@ -15,19 +15,19 @@ services:
       - 3306:3306
     env_file:
       - ./env/mysql.env
-  # canal:
-  #   image: canal/canal-server:v1.1.8-alpha-3
-  #   container_name: kk-canal
-  #   ports:
-  #     - "11111:11111"
-  #     - "11112:11112"
-  #   # command: ["/home/admin/canal-server/bin/startup.sh"]
-  #   volumes:
-  #     - ./config/canal/instance.properties:/home/admin/canal-server/conf/example/instance.properties
-  #     - ./config/canal/canal.properties:/home/admin/canal-server/conf/canal.properties
-  #   depends_on:
-  #     - mysql
-  #     - kafka
+  canal:
+    image: canal/canal-server:v1.1.8-alpha-3
+    container_name: kk-canal
+    ports:
+      - "11111:11111"
+      - "11112:11112"
+    # command: ["/home/admin/canal-server/bin/startup.sh"]
+    volumes:
+      - ./config/canal/instance.properties:/home/admin/canal-server/conf/example/instance.properties
+      - ./config/canal/canal.properties:/home/admin/canal-server/conf/canal.properties
+    depends_on:
+      - mysql
+      - kafka
 
   redis:
     image: redis:latest
@@ -80,10 +80,10 @@ services:
     environment:
       KAFKA_BROKER_ID: 0
       KAFKA_ZOOKEEPER_CONNECT: kk-zookeeper:2181
-      KAFKA_LISTENERS: PLAINTEXT://0.0.0.0:9092 
-      KAFKA_ADVERTISED_LISTENERS: PLAINTEXT://localhost:9092
-      # KAFKA_LISTENER_SECURITY_PROTOCOL_MAP: PLAINTEXT:PLAINTEXT,PLAINTEXT1:PLAINTEXT
-      # KAFKA_OFFSETS_TOPIC_REPLICATION_FACTOR: 1  
+      KAFKA_LISTENERS: LISTENER_BOB://kk-kafka:29092,LISTENER_FRED://0.0.0.0:9092
+      KAFKA_ADVERTISED_LISTENERS: LISTENER_BOB://kk-kafka:29092,LISTENER_FRED://127.0.0.1:9092
+      KAFKA_LISTENER_SECURITY_PROTOCOL_MAP: LISTENER_BOB:PLAINTEXT,LISTENER_FRED:PLAINTEXT
+      KAFKA_INTER_BROKER_LISTENER_NAME: LISTENER_BOB
     depends_on:
       - zookeeper
 

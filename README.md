@@ -23,3 +23,18 @@ cd /opt/kafka/bin
 ./kafka-topics.sh --create --topic kk-forum-like --bootstrap-server localhost:9092
 ./kafka-topics.sh --describe --topic kk-forum-like --bootstrap-server localhost:9092
 ```
+
+### mysql创建canna用户
+```
+CREATE USER 'canal'@'%' IDENTIFIED WITH 'mysql_native_password' BY 'canal';
+GRANT ALL PRIVILEGES ON *.* TO 'canal'@'%';
+FLUSH PRIVILEGES;
+```
+
+### 检查kafka是否有canal传递的消息
+
+```
+在canal的配置文件中配置监听了kk_forum.like_count表， 我们通过改动该表的数据，观察kafka是否有消息消费
+cd /opt/kafka/bin
+./kafka-console-consumer.sh --topic kk-forum-like-count --bootstrap-server localhost:9092
+```
