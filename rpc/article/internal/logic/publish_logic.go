@@ -2,6 +2,8 @@ package logic
 
 import (
 	"context"
+	"fmt"
+	"strconv"
 	"time"
 
 	"article/internal/code"
@@ -56,6 +58,26 @@ func (l *PublishLogic) Publish(in *pb.PublishRequest) (*pb.PublishResponse, erro
 	if err != nil {
 		l.Logger.Errorf("get articleId error %s", err.Error())
 		return nil, err
+	}
+	// 缓存
+	var (
+		articleIdStr   = strconv.Itoa(int(articleId))
+		publishTimeKey = fmt.Sprintf("%s%d", types.CacheArticlePublishTimePrefix, in.UserId)
+		likeKey        = fmt.Sprintf("%s%d", types.CacheArticleLikePrefix, in.UserId)
+	)
+	b, _ := l.svcCtx.BizRedis.ExistsCtx(l.ctx, publishTimeKey)
+	if b {
+		_, err := l.svcCtx.BizRedis.ZaddCtx(l.ctx, publishTimeKey, time.Now().Unix(), articleIdStr)
+		if err != nil {
+			l.Logger.Errorf("cache publish key articleId error: err is %v", err.Error())
+		}
+	}
+	b, _ = l.svcCtx.BizRedis.ExistsCtx(l.ctx, likeKey)
+	if b {
+		_, err := l.svcCtx.BizRedis.ZaddCtx(l.ctx, likeKey, time.Now().Unix(), articleIdStr)
+		if err != nil {
+			l.Logger.Errorf("cache like key articleId error: err is %v", err.Error())
+		}
 	}
 	return &pb.PublishResponse{ArticleId: articleId}, nil
 }
