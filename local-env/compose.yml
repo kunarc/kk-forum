@@ -96,6 +96,11 @@ services:
       test: ["CMD", "nc", "-z", "localhost", "9092"]
       interval: 10s
       timeout: 5s
+    logging:
+      driver: "local"
+      options:
+        max-size: "10m"   # 设置每个日志文件的最大大小为 10 MB
+        max-file: "3"     # 设置最多保存 3 个日志文件（超过将会覆盖旧文件）
     depends_on:
       zookeeper:
         condition: service_healthy
