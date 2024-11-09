@@ -1,3 +1,4 @@
+version: '3.7'
 name: kk-forum
 services:
   mysql:
@@ -26,8 +27,10 @@ services:
       - ./config/canal/instance.properties:/home/admin/canal-server/conf/example/instance.properties
       - ./config/canal/canal.properties:/home/admin/canal-server/conf/canal.properties
     depends_on:
-      - mysql
-      - kafka
+      mysql:
+        condition: service_healthy
+      kafka:
+        condition: service_healthy
 
   redis:
     image: redis:latest
@@ -69,6 +72,11 @@ services:
   zookeeper: # 改为 my_zookeeper
     image: zookeeper:latest
     container_name: kk-zookeeper # 也可以自定义容器名
+    healthcheck:
+      test: ["CMD", "nc", "-z", "localhost", "2181"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
     ports:
       - "2181:2181"
       
@@ -84,8 +92,13 @@ services:
       KAFKA_ADVERTISED_LISTENERS: LISTENER_BOB://kk-kafka:29092,LISTENER_FRED://127.0.0.1:9092
       KAFKA_LISTENER_SECURITY_PROTOCOL_MAP: LISTENER_BOB:PLAINTEXT,LISTENER_FRED:PLAINTEXT
       KAFKA_INTER_BROKER_LISTENER_NAME: LISTENER_BOB
+    healthcheck:
+      test: ["CMD", "nc", "-z", "localhost", "9092"]
+      interval: 10s
+      timeout: 5s
     depends_on:
-      - zookeeper
+      zookeeper:
+        condition: service_healthy
 
   prometheus: 
     image: prom/prometheus    
@@ -154,9 +167,11 @@ services:
       - ELASTICSEARCH_USERNAME=kibana
       - ELASTICSEARCH_PASSWORD=8888  # 保留用户名和密码
     depends_on:
-     - es
+      es:
+        condition: service_healthy
+
     healthcheck:
-      test:
+      test: 
         [
           "CMD-SHELL",
           "curl -s -I http://localhost:5601 | grep -q 'HTTP/1.1 302 Found'",  # 使用 HTTP 检查
