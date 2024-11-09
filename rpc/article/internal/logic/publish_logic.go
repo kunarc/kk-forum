@@ -2,7 +2,6 @@ package logic
 
 import (
 	"context"
-	"fmt"
 	"strconv"
 	"time"
 
@@ -62,8 +61,8 @@ func (l *PublishLogic) Publish(in *pb.PublishRequest) (*pb.PublishResponse, erro
 	// 缓存
 	var (
 		articleIdStr   = strconv.Itoa(int(articleId))
-		publishTimeKey = fmt.Sprintf("%s%d", types.CacheArticlePublishTimePrefix, in.UserId)
-		likeKey        = fmt.Sprintf("%s%d", types.CacheArticleLikePrefix, in.UserId)
+		publishTimeKey = articlesKey(in.UserId, types.PublishTimeSortType)
+		likeKey        = articlesKey(in.UserId, types.LikeSortType)
 	)
 	b, _ := l.svcCtx.BizRedis.ExistsCtx(l.ctx, publishTimeKey)
 	if b {
@@ -74,7 +73,7 @@ func (l *PublishLogic) Publish(in *pb.PublishRequest) (*pb.PublishResponse, erro
 	}
 	b, _ = l.svcCtx.BizRedis.ExistsCtx(l.ctx, likeKey)
 	if b {
-		_, err := l.svcCtx.BizRedis.ZaddCtx(l.ctx, likeKey, time.Now().Unix(), articleIdStr)
+		_, err := l.svcCtx.BizRedis.ZaddCtx(l.ctx, likeKey, 0, articleIdStr)
 		if err != nil {
 			l.Logger.Errorf("cache like key articleId error: err is %v", err.Error())
 		}

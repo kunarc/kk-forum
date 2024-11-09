@@ -3,7 +3,7 @@ package code
 import "pkg/xerror"
 
 var (
-	RegisterMobileEmpty        = xerror.New(10001, "注册手机号不能为空")
+	RegisterMobileEmpty        = xerror.New(100001, "注册手机号不能为空")
 	VerificationCodeEmpty      = xerror.New(100002, "验证码不能为空")
 	MobileHasRegistered        = xerror.New(100003, "手机号已经注册")
 	LoginMobileEmpty           = xerror.New(100003, "手机号不能为空")

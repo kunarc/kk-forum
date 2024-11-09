@@ -91,6 +91,9 @@ require (
 	sigs.k8s.io/yaml v1.3.0 // indirect
 )
 
-require pkg v0.0.0
+require (
+	golang.org/x/sync v0.8.0
+	pkg v0.0.0
+)
 
 replace pkg => ../../pkg
