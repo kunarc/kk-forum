@@ -31,11 +31,11 @@ scrape_configs:
     file_sd_configs:
       - files:
           - targets.json
-  - job_name: "beyond"
+  - job_name: "kk-forum"
     metrics_path: /metrics
     scheme: http
     consul_sd_configs:
-      - server: beyond-consul:8500
+      - server: kk-consul:8500
         services: []
     relabel_configs:
       - regex: __meta_consul_service_metadata_(.+)
