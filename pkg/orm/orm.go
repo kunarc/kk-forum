@@ -57,7 +57,7 @@ func (l *OrmLog) Trace(ctx context.Context, begin time.Time, fc func() (sql stri
 	logx.WithContext(ctx).WithDuration(elapsed).Infof("[%.3fms] [rows:%v] %s", float64(elapsed.Nanoseconds())/1e6, rows, sql)
 }
 
-func newDB(c Config) (*DB, error) {
+func newDB(c *Config) (*DB, error) {
 	if c.MaxOpenConns == 0 {
 		c.MaxOpenConns = 10
 	}
@@ -87,7 +87,7 @@ func newDB(c Config) (*DB, error) {
 	return &DB{db}, nil
 }
 
-func MustNewMysql(c Config) *DB {
+func MustNewMysql(c *Config) *DB {
 	db, err := newDB(c)
 	if err != nil {
 		panic(err)
