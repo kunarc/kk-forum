@@ -1,12 +1,14 @@
 package main
 
 import (
+	"flag"
+	"fmt"
+	"pkg/consul"
+	"pkg/xerror"
+
 	"api/internal/config"
 	"api/internal/handler"
 	"api/internal/svc"
-	"flag"
-	"fmt"
-	"pkg/xerror"
 
 	"github.com/zeromicro/go-zero/core/conf"
 	"github.com/zeromicro/go-zero/rest"
@@ -23,10 +25,13 @@ func main() {
 
 	server := rest.MustNewServer(c.RestConf)
 	defer server.Stop()
-
 	ctx := svc.NewServiceContext(c)
 	handler.RegisterHandlers(server, ctx)
 	httpx.SetErrorHandler(xerror.ErrorHandler)
+	err := consul.Register(c.Consul, fmt.Sprintf("%s:%d", c.ServiceConf.Prometheus.Host, c.ServiceConf.Prometheus.Port))
+	if err != nil {
+		fmt.Printf("register consul error: %v\n", err)
+	}
 	fmt.Printf("Starting server at %s:%d...\n", c.Host, c.Port)
 	server.Start()
 }
