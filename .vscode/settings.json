@@ -1,0 +1,236 @@
+{
+    "editor.mouseWheelZoom": true,
+    // "go.lintTool": "revive",
+    "go.formatTool": "gofumpt",
+    "go.useLanguageServer": true,
+    "gopls": {
+        "formatting.gofumpt": true,
+    },
+    "go.toolsManagement.autoUpdate": true,
+    "go.toolsEnvVars": {
+        "GOPROXY": "https://goproxy.cn,direct",
+    },
+    "go.delveConfig": {
+        "dlvFlags": [
+            "--check-go-version=false"
+        ],
+        "dlvLoadConfig": {
+            "followPointers": true,
+            "maxVariableRecurse": 1,
+            "maxStringLen": 1024,
+            "maxArrayValues": 64,
+            "maxStructFields": -1
+        },
+        "apiVersion": 2,
+        "showGlobalVariables": false,
+        "debugAdapter": "legacy",
+        "substitutePath": []
+    },
+    "go.installDependenciesWhenBuilding": true,
+    "go.inlayHints.constantValues": true,
+    // GoComment
+    "functionTemplate": "// ${func_name} \n//\t@receiver ${receiver_name_type} \n//\t@param ${param_name_type} \n//\t@return ${return_name_type} \n//\t@author ${git_name} \n//\t@update ${date}\n",
+    "typeTemplate": "// ${type_name} \n//\t@author ${git_name} \n//\t@update ${date}",
+    "varTemplate": "// ${var_name} ${var_type} \n//\t@update ${date}",
+    "explorer.confirmDragAndDrop": false,
+    "workbench.editorAssociations": {
+        "*.ipynb": "jupyter-notebook"
+    },
+    "git.autofetch": true,
+    "docker.images.description": [
+        "CreatedTime",
+        "ImageId"
+    ],
+    "git.ignoreLegacyWarning": true,
+    "gitlens.defaultDateFormat": null,
+    "gitlens.defaultGravatarsStyle": "retro",
+    "files.associations": {
+        "*.rmd": "rmd",
+        "*.template": "yaml",
+        "*.jsonl": "jsonl",
+        "*.yaml": "yaml"
+    },
+    "terminal.integrated.tabs.enabled": true,
+    "editor.fontFamily": "MesloLGS NF",
+    "terminal.integrated.defaultProfile.linux": "zsh",
+    "todohighlight.include": [
+        "**/*.go",
+        "**/*.js",
+        "**/*.jsx",
+        "**/*.ts",
+        "**/*.tsx",
+        "**/*.html",
+        "**/*.php",
+        "**/*.css",
+        "**/*.scss"
+    ],
+    "todohighlight.keywords": [
+        {
+            "text": "NOTE:",
+            "color": "white",
+            "backgroundColor": "orange",
+            "overviewRulerColor": "grey"
+        },
+    ],
+    "security.workspace.trust.untrustedFiles": "open",
+    "notebook.cellToolbarLocation": {
+        "default": "right",
+        "jupyter-notebook": "left"
+    },
+    "redhat.telemetry.enabled": true,
+    "git.confirmSync": false,
+    "vscodeGoogleTranslate.preferredLanguage": "Chinese (Simplified)",
+    "jupyter.askForKernelRestart": false,
+    "gitlens.advanced.messages": {
+        "suppressGitVersionWarning": true
+    },
+    "jupyter.useDefaultConfigForJupyter": false,
+    "cmake.configureOnOpen": false,
+    "leetcode.endpoint": "leetcode-cn",
+    "powermode.enabled": true,
+    "powermode.shake.enabled": false,
+    "leetcode.hint.configWebviewMarkdown": false,
+    "leetcode.showDescription": "Both",
+    "leetcode.hint.commandShortcut": false,
+    // "[sql]": {
+    //     "editor.defaultFormatter": "adpyke.vscode-sql-formatter"
+    // },
+    "leetcode.hint.setDefaultLanguage": false,
+    "leetcode.hint.commentDescription": false,
+    "powermode.combo.location": "editor",
+    "[python]": {
+        // "editor.defaultFormatter": "ms-python.black-formatter",
+        "editor.formatOnSave": true,
+        "editor.codeActionsOnSave": {
+            "source.organizeImports": "explicit",
+            "source.fixAll": "explicit",
+        },
+    },
+    "python.analysis.fixAll": [
+        "source.unusedImports"
+    ],
+    "black-formatter.args": [
+        "--line-length=150"
+    ],
+    "python.linting.enabled": false,
+    // indent-rainbow
+    "indentRainbow.includedLanguages": [
+        "python"
+    ],
+    // Using the light mode
+    "indentRainbow.indicatorStyle": "light",
+    // we use a simple 1 pixel wide line
+    "indentRainbow.lightIndicatorStyleLineWidth": 2,
+    // the same colors as above but more visible
+    "indentRainbow.colors": [
+        "rgba(255,255,64,0.3)",
+        "rgba(127,255,127,0.3)",
+        "rgba(255,127,255,0.3)",
+        "rgba(79,236,236,0.3)"
+    ],
+    "workbench.iconTheme": "material-icon-theme",
+    "vsicons.dontShowNewVersionMessage": true,
+    "workbench.startupEditor": "none",
+    "excalidraw.theme": "dark",
+    "explorer.confirmDelete": false,
+    "editor.inlineSuggest.enabled": true,
+    "github.copilot.enable": {
+        "*": true,
+        "plaintext": false,
+        "markdown": true,
+        "scminput": false,
+        "yaml": true
+    },
+    "github.copilot.advanced": {},
+    // "terminal.integrated.enableMultiLinePasteWarning": ,
+    "git.openRepositoryInParentFolders": "always",
+    "editor.inlineSuggest.showToolbar": "always",
+    "editor.unicodeHighlight.ambiguousCharacters": false,
+    "editor.unicodeHighlight.invisibleCharacters": false,
+    "git.ignoreRebaseWarning": true,
+    // "workbench.colorTheme": "Andromeda Bordered",
+    "jupyter.askForLargeDataFrames": false,
+    "jupyter.debugJustMyCode": false,
+    "hediet.vscode-drawio.resizeImages": null,
+    "better-comments.tags": [
+        {
+            "tag": "!",
+            "color": "#FF2D00",
+            "strikethrough": false,
+            "underline": false,
+            "backgroundColor": "transparent",
+            "bold": false,
+            "italic": false
+        },
+        {
+            "tag": "?",
+            "color": "#3498DB",
+            "strikethrough": false,
+            "underline": false,
+            "backgroundColor": "transparent",
+            "bold": false,
+            "italic": false
+        },
+        {
+            "tag": "//",
+            "color": "#474747",
+            "strikethrough": true,
+            "underline": false,
+            "backgroundColor": "transparent",
+            "bold": false,
+            "italic": false
+        },
+        {
+            "tag": "*",
+            "color": "#98C379",
+            "strikethrough": false,
+            "underline": false,
+            "backgroundColor": "transparent",
+            "bold": false,
+            "italic": false
+        },
+        {
+            "tag": "todo",
+            "color": "#FF8C00",
+            "strikethrough": false,
+            "underline": false,
+            "backgroundColor": "transparent",
+            "bold": true,
+            "italic": false
+        },
+        {
+            "tag": "fixme",
+            "color": "#FF2D00",
+            "strikethrough": false,
+            "underline": false,
+            "backgroundColor": "transparent",
+            "bold": true,
+            "italic": false
+        },
+        {
+            "tag": "note",
+            "color": "#99FFFF",
+            "strikethrough": false,
+            "underline": false,
+            "backgroundColor": "transparent",
+            "bold": true,
+            "italic": false
+        },
+    ],
+    "gitlens.views.worktrees.files.layout": "list",
+    "GitCommitPlugin.MaxSubjectCharacters": 50,
+    "go.testFlags": [
+        "-v",
+        "-count=1"
+    ],
+    "update.showReleaseNotes": false,
+    "workbench.editor.empty.hint": "hidden",
+    "terminal.integrated.fontFamily": "monospace",
+    "remoteX11.SSH.verboseLogging": true,
+    "git.suggestSmartCommit": false,
+    "github.copilot.editor.enableAutoCompletions": true,
+    "editor.unicodeHighlight.nonBasicASCII": false,
+    "[dockerfile]": {
+        "editor.defaultFormatter": "ms-azuretools.vscode-docker"
+    }
+}
